@@ -32,15 +32,15 @@ Function Remove-StartMenu-Tiles
 
 Function Add-StartMenu-Shortcuts
 {
-	$startMenuFolder = "$env:appdata\Microsoft\Windows\StartMenu\Programs"
+	$startMenuFolder = "$env:appdata\Microsoft\Windows\Start Menu\Programs"
 
 	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Corbeille.lnk")
 	$Shortcut.TargetPath = "shell:RecycleBinFolder"
-	$Shortcut.Save
+	$Shortcut.Save()
 
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Remove US keyboard" -Target "$PSScriptRoot\Remove US keyboard.bat"
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 1" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 2" -Target "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 2" -Target "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Startup programs" -Target "%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"
 }
 
