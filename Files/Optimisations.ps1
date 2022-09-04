@@ -131,7 +131,7 @@ Function main
 	Add-StartMenu-Shortcuts
 
 	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
-	if ($GpuBrand -like "*nvidia*" == $TRUE) {
+	if ($GpuBrand -match "nvidia") {
 		"Write-Host Importing Nvidia optimised settings"
 		Enable-MSIMode-Nvidia
 		Download-NvidiaProfileInspector
