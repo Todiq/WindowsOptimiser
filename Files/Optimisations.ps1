@@ -1,6 +1,6 @@
 $ProgressPreference = 'SilentlyContinue'
 
-Function Remove-DefaultApps()
+Function Remove-DefaultApps
 {
 	$Apps = @("Disney.37853FC22B2CE", "Microsoft.549981C3F5F10", "Microsoft.BingNews",
 	"Microsoft.BingWeather", "Microsoft.GetHelp", "Microsoft.Getstarted",
@@ -20,23 +20,23 @@ Function Remove-DefaultApps()
 	Get-WindowsPackage -Online | Where PackageName -like *QuickAssist* | Remove-WindowsPackage -Online -NoRestart
 }
 
-Function Import-RegistryKeys()
+Function Import-RegistryKeys
 {
 	reg import "$PSScriptRoot\Registry Tweaks.reg"
 }
 
-Function Remove-StartMenu-Tiles()
+Function Remove-StartMenu-Tiles
 {
 	robocopy "$PSScriptRoot" "$env:localappdata\microsoft\Windows\Shell" "LayoutModification.xml" /nfl /ndl /njh /njs /nc /ns /np
 }
 
-Function Add-StartMenu-Shortcuts()
+Function Add-StartMenu-Shortcuts
 {
 	$startMenuFolder = "$env:appdata\Microsoft\Windows\StartMenu\Programs"
 
 	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Corbeille.lnk")
 	$Shortcut.TargetPath = "shell:RecycleBinFolder"
-	$Shortcut.Save()
+	$Shortcut.Save
 
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Remove US keyboard" -Target "$PSScriptRoot\Remove US keyboard.bat"
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 1" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs"
@@ -44,18 +44,18 @@ Function Add-StartMenu-Shortcuts()
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Startup programs" -Target "%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"
 }
 
-Function Download-NvidiaProfileInspector()
+Function Download-NvidiaProfileInspector
 {
 	Invoke-WebRequest 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.3.0.10/nvidiaProfileInspector.zip' -OutFile "$env:temp\Nvidia.zip"
 	Expand-Archive "$env:temp\Nvidia.zip" -DestinationPath "$PSScriptRoot"
 }
 
-Function Import-NvidiaProfile()
+Function Import-NvidiaProfile
 {
 	"$PSScriptRoot\nvidiaProfileInspector.exe" "$PSScriptRoot\NvidiaBaseProfile.nip"
 }
 
-Function Enable-MSIMode-Nvidia()
+Function Enable-MSIMode-Nvidia
 {
 	$devices = Get-Childitem -path HKLM:\SYSTEM\CurrentControlSet\Enum\PCI
 
@@ -68,26 +68,26 @@ Function Enable-MSIMode-Nvidia()
 	}
 }
 
-Function Install-Bitsum-PowerPlan()
+Function Install-Bitsum-PowerPlan
 {
 	powercfg -import $Path 77777777-7777-7777-7777-777777777777
 	powercfg -SETACTIVE "77777777-7777-7777-7777-777777777777"
 }
 
-Function Remove-Other-PowerPlans()
+Function Remove-Other-PowerPlans
 {
 	powercfg -delete 381b4222-f694-41f0-9685-ff5bb260df2e
 	powercfg -delete 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 	powercfg -delete a1841308-3541-4fab-bc81-f71556f20b4a
 }
 
-Function Disable-Hibernation()
+Function Disable-Hibernation
 {
 	powercfg -h off
 }
 
 # Reduce the quantity of svchost processes
-Function Update-SvcHost-Threshold()
+Function Update-SvcHost-Threshold
 {
 	# Get RAM quantity in KB. Replace "1024" by "1gb" to get in GB
 	$RAM = (Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum / 1024
@@ -100,25 +100,25 @@ Function Update-SvcHost-Threshold()
 	}
 }
 
-Function Install-TimerResolution-Service()
+Function Install-TimerResolution-Service
 {
 	"$PSScriptRoot\SetTimerResolutionService.exe" -install
 	Set-Service -Name "STR" -StartupType Automatic
 	Start-Service -Name "STR"
 }
 
-Function Remove-TmpFiles()
+Function Remove-TmpFiles
 {
 	Get-ChildItem -Path "C:\Windows\Temp" *.* -Recurse | Remove-Item -Force -Recurse
 	Get-ChildItem -Path "$ENV:Temp" *.* -Recurse | Remove-Item -Force -Recurse
 	cleanmgr.exe /VERYLOWDISK
 }
 
-Function main()
+Function main
 {
-	$Chassis = Get-WmiObject -Class win32_systemenclosure -ComputerName $env:ComputerName | Where-Object { $_.chassistypes -eq 9 -or $_.chassistypes -eq 10 -or $_.chassistypes -eq 14}
-	$Battery = Get-WmiObject -Class win32_battery -ComputerName $env:ComputerName
-	if ($Chassis == $False -and $Battery == $FALSE) {
+	$Battery = Get-CimInstance -Class CIM_Battery
+	if ($Battery -eq $NULL -or $Battery.Availability -eq "" -or $Battery.Availability -eq 11) {
+		Write-Host "Installing Bitsum PowerPlan"
 		Install-Bitsum-PowerPlan
 		Remove-Other-PowerPlans
 	}
@@ -130,10 +130,13 @@ Function main()
 	Remove-StartMenu-Tiles
 	Add-StartMenu-Shortcuts
 
-	Enable-MSIMode-Nvidia
-	Download-NvidiaProfileInspector
-	Import-NvidiaProfile
-
+	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
+	if ($GpuBrand -like "*nvidia*" == $TRUE) {
+		"Write-Host Importing Nvidia optimised settings"
+		Enable-MSIMode-Nvidia
+		Download-NvidiaProfileInspector
+		Import-NvidiaProfile
+	}
 	Remove-TmpFiles
 }
 

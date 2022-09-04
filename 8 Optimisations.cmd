@@ -2,7 +2,7 @@
 @echo ----------------------------------------------------------------------------------------------------
 @echo --------------------------------OPTIMISING (PLEASE WAIT)--------------------------------
 @echo ----------------------------------------------------------------------------------------------------
-powershell -executionpolicy bypass -file "$PSScriptRoot\Files\Optimisations.ps1"
+powershell -executionpolicy bypass -file "%~dp0\Files\Optimisations.ps1"
 @echo .
 @echo .
 @echo .
