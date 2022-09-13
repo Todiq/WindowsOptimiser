@@ -27,7 +27,7 @@ Function Import-RegistryKeys
 
 Function Remove-StartMenu-Tiles
 {
-	robocopy "$PSScriptRoot" "$env:localappdata\microsoft\Windows\Shell" "LayoutModification.xml" /nfl /ndl /njh /njs /nc /ns /np
+	robocopy "$PSScriptRoot" "$env:localappdata\Microsoft\Windows\Shell" "LayoutModification.xml" /nfl /ndl /njh /njs /nc /ns /np
 }
 
 Function Add-StartMenu-Shortcuts
@@ -57,7 +57,7 @@ Function Import-NvidiaProfile
 
 Function Enable-MSIMode-Nvidia
 {
-	$devices = Get-Childitem -path HKLM:\SYSTEM\CurrentControlSet\Enum\PCI
+	$devices = Get-ChildItem -path HKLM:\SYSTEM\CurrentControlSet\Enum\PCI
 
 	Foreach ($device in $devices) {
 		$Properties = Get-ChildItem -path $device.PSPath | Get-ItemProperty
