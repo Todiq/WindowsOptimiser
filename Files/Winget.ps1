@@ -9,20 +9,20 @@ Function Install-WinGet
 	$githubURL = [System.Net.HttpWebRequest]::Create("https://github.com/microsoft/winget-cli/releases/latest").GetResponse().ResponseUri.AbsoluteUri
 	$githubURL = "$githubURL" -replace "(.*)tag(.*)", '$1download$2'
 
-	$wingetURL = "$githubURL\$winget"
-	$licenseURL = "$githubURL\$license"
+	$wingetURL = "$githubURL/$winget"
+	$licenseURL = "$githubURL/$license"
 	$vclibsURL = "https://aka.ms/$vclibs"
 
 	$location = "$ENV:Temp"
 
 	if ((Test-Path -Path "$location\$vclibs") -eq $FALSE) {
-		Invoke-WebRequest "$vclibsURL" -OutFile "$location\$vclibs"
+		cURL.exe -Lo "$location\$vclibs" "$vclibsURL"
 	}
 	if ((Test-Path -Path "$location\$winget") -eq $FALSE) {
-		Invoke-WebRequest "$wingetURL" -OutFile "$location\$winget"
+		cURL.exe -Lo "$location\$winget" "$wingetURL"
 	}
 	if ((Test-Path -Path "$location\$license") -eq $FALSE) {
-		Invoke-WebRequest "$licenseURL" -OutFile "$location\$license"
+		cURL.exe -Lo "$location\$license" "$licenseURL"
 	}
 	Add-AppxProvisionedPackage -Online -PackagePath "$location\$vclibs" -SkipLicense
 	Add-AppxProvisionedPackage -Online -PackagePath "$location\$winget" -LicensePath "$location\$license"
