@@ -1,6 +1,7 @@
 Windows Registry Editor Version 5.00
 
 
+
 ; EDGE
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
 "StartupBoostEnabled"=dword:00000000
@@ -70,7 +71,7 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds]
 "EnableFeeds"=dword:00000000
 
-; Remove taskbar pins
+; Remove taskbar pins 
 [-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband]
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\AuxilliaryPins]
 
@@ -81,7 +82,7 @@ Windows Registry Editor Version 5.00
 
 
 
-; START MENU
+; START MENU 
 ; Always hide most used list in start menu
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
 "ShowOrHideMostUsedApps"=dword:00000002
@@ -140,28 +141,8 @@ Windows Registry Editor Version 5.00
 
 
 ; PERSONALIZATION
-; Dark theme
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize]
-"AppsUseLightTheme"=dword:00000000
-"SystemUsesLightTheme"=dword:00000000
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize]
-"AppsUseLightTheme"=dword:00000000
-
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent]
-"StartColorMenu"=dword:ff3d3f41
-"AccentColorMenu"=dword:ff484a4c
-"AccentPalette"=hex(3):DF,DE,DC,00,A6,A5,A1,00,68,65,62,00,4C,4A,48,00,41,\
-3F,3D,00,27,25,24,00,10,0D,0D,00,10,7C,10,00
-
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM]
-"EnableWindowColorization"=dword:00000001
-"AccentColor"=dword:ff484a4c
-"ColorizationColor"=dword:c44c4a48
-"ColorizationAfterglow"=dword:c44c4a48
-
 ; Disable windows widgets
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh] 
 "AllowNewsAndInterests"=dword:00000000
 
 ; 100% DPI
@@ -290,14 +271,6 @@ Windows Registry Editor Version 5.00
 
 
 ; POWER SETTINGS
-; Disable lock
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings]
-"ShowLockOption"=dword:00000000
-
-; Disable sleep
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings]
-"ShowSleepOption"=dword:00000000
-
 ; Disable hibernate
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power]
 "HibernateEnabled"=dword:00000000
@@ -458,7 +431,7 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam]
 "Value"="Allow"
 
-; Microphone
+; Microphone 
 [Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone]
 "Value"="Allow"
 
@@ -509,21 +482,23 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\radios]
 "Value"="Deny"
 
-; Other devices
+; Other devices 
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\bluetoothSync]
 "Value"="Deny"
 
-; App diagnostics
+; App diagnostics 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics]
 "Value"="Deny"
 
-; Automatic file downloads
 
+
+
+; Automatic file downloads
 ; Documents
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\documentsLibrary]
 "Value"="Deny"
 
-; Downloads folder
+; Downloads folder 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\downloadsFolder]
 "Value"="Deny"
 
@@ -547,15 +522,15 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureWithoutBorder]
 "Value"="Deny"
 
-; Screenshots and apps
+; Screenshots and apps 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureProgrammatic]
 "Value"="Allow"
 
-; Disable let websites show me locally relevant content by accessing my language list
+; Disable let websites show me locally relevant content by accessing my language list 
 [HKEY_CURRENT_USER\Control Panel\International\User Profile]
 "HttpAcceptLanguageOptOut"=dword:00000001
 
-; Disable let windows improve start and search results by tracking app launches
+; Disable let windows improve start and search results by tracking app launches  
 [HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\EdgeUI]
 "DisableMFUTracking"=dword:00000001
 
@@ -578,7 +553,7 @@ Windows Registry Editor Version 5.00
 "NumberOfSIUFInPeriod"=dword:00000000
 "PeriodInNanoSeconds"=-
 
-; Disable store my activity history on this device
+; Disable store my activity history on this device 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System]
 "PublishUserActivities"=dword:00000000
 
@@ -661,7 +636,7 @@ C2,0A,01,D2,1E,28,4D,00,69,00,63,00,72,00,6F,00,73,00,6F,00,66,00,74,00,2E,\
 00,79,00,4F,00,6E,00,6C,00,79,00,C2,28,01,D1,32,80,E0,AA,8A,99,30,D1,3C,80,\
 E0,F6,C5,D5,0E,CA,50,00,00
 
-; Disable magnifier settings
+; Disable magnifier settings 
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\ScreenMagnifier]
 "FollowCaret"=dword:00000000
 "FollowNarrator"=dword:00000000
@@ -698,7 +673,7 @@ E0,F6,C5,D5,0E,CA,50,00,00
 "NarratorCursorHighlight"=dword:00000000
 "CoupleNarratorCursorKeyboard"=dword:00000000
 
-; Disable ease of access settings
+; Disable ease of access settings 
 [HKEY_CURRENT_USER\Software\Microsoft\Ease of Access]
 "selfvoice"=dword:00000000
 "selfscan"=dword:00000000
@@ -753,7 +728,7 @@ E0,F6,C5,D5,0E,CA,50,00,00
 "MaintenanceDisabled"=dword:00000001
 
 ; Disable background apps global
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications] 
 "GlobalUserDisabled"=dword:00000001
 
 ; Disable use my sign in info after restart

@@ -28,4 +28,5 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 :--------------------------------------
-powershell -executionpolicy bypass -file "%~dp0\Files\Winget.ps1"
+
+powershell -executionpolicy bypass -file "%~dp0\Files\Ninite\Ninite.ps1"

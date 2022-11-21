@@ -1,0 +1,3 @@
+[submodule "Files/Ninite"]
+	path = Files/Ninite
+	url = https://github.com/MinersWin/Ninite.git

@@ -25,12 +25,12 @@ Function Import-RegistryKeys
 	reg import "$PSScriptRoot\Registry Tweaks.reg"
 }
 
-Function Remove-StartMenu-Tiles
+Function Remove-StartMenuTiles
 {
 	robocopy "$PSScriptRoot" "$env:localappdata\Microsoft\Windows\Shell" "LayoutModification.xml" /nfl /ndl /njh /njs /nc /ns /np
 }
 
-Function Add-StartMenu-Shortcuts
+Function Add-StartMenuShortcuts
 {
 	$startMenuFolder = "$env:appdata\Microsoft\Windows\Start Menu\Programs"
 
@@ -41,21 +41,30 @@ Function Add-StartMenu-Shortcuts
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Remove US keyboard" -Target "$PSScriptRoot\Remove US keyboard.bat"
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 1" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs"
 	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 2" -Target "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Startup programs" -Target "%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"
+	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Startup programs" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup"
+	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Paint" -Target "$env:WinDir\system32\mspaint.exe"
+	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Bloc-notes" -Target "$env:WinDir\system32\notepad.exe"
+	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Panneau de configuration" -Target "$env:WinDir\system32\control.exe"
 }
 
 Function Download-NvidiaProfileInspector
 {
-	Invoke-WebRequest 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.3.0.10/nvidiaProfileInspector.zip' -OutFile "$env:temp\Nvidia.zip"
-	Expand-Archive "$env:temp\Nvidia.zip" -DestinationPath "$PSScriptRoot"
+	$URL = [System.Net.HttpWebRequest]::Create("https://github.com/Orbmu2k/nvidiaProfileInspector/releases/latest").GetResponse().ResponseUri.AbsoluteUri
+	$URL = "$URL" -replace "(.*)tag(.*)", '$1download$2'
+	Invoke-WebRequest "$URL\nvidiaProfileInspector.zip" -OutFile "$env:temp\nvidiaProfileInspector.zip"
+	Expand-Archive "$env:temp\nvidiaProfileInspector.zip" -DestinationPath "$PSScriptRoot\nvidiaProfileInspector"
 }
 
 Function Import-NvidiaProfile
 {
-	"$PSScriptRoot\nvidiaProfileInspector.exe" "$PSScriptRoot\NvidiaBaseProfile.nip"
+	Start-Process `
+	-FilePath "$PSScriptRoot\nvidiaProfileInspector\nvidiaProfileInspector.exe" `
+	-Workdir "$PSScriptRoot\nvidiaProfileInspector\" `
+	-Wait `
+	-ArgumentList "$PSScriptRoot\NvidiaBaseProfile.nip"
 }
 
-Function Enable-MSIMode-Nvidia
+Function Enable-MSIModeNvidia
 {
 	$devices = Get-ChildItem -path HKLM:\SYSTEM\CurrentControlSet\Enum\PCI
 
@@ -68,13 +77,13 @@ Function Enable-MSIMode-Nvidia
 	}
 }
 
-Function Install-Bitsum-PowerPlan
+Function Install-BitsumPowerPlan
 {
 	powercfg -import $Path 77777777-7777-7777-7777-777777777777
 	powercfg -SETACTIVE "77777777-7777-7777-7777-777777777777"
 }
 
-Function Remove-Other-PowerPlans
+Function Remove-OtherPowerPlans
 {
 	powercfg -delete 381b4222-f694-41f0-9685-ff5bb260df2e
 	powercfg -delete 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
@@ -87,7 +96,7 @@ Function Disable-Hibernation
 }
 
 # Reduce the quantity of svchost processes
-Function Update-SvcHost-Threshold
+Function Update-SvcHostThreshold
 {
 	# Get RAM quantity in KB. Replace "1024" by "1gb" to get in GB
 	$RAM = (Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum / 1024
@@ -100,18 +109,16 @@ Function Update-SvcHost-Threshold
 	}
 }
 
-Function Install-TimerResolution-Service
+Function Install-C++Packages
 {
-	"$PSScriptRoot\SetTimerResolutionService.exe" -install
-	Set-Service -Name "STR" -StartupType Automatic
-	Start-Service -Name "STR"
+	Start-Process -FilePath "$PSScriptRoot\VisualCppRedist_AIO_x86_x64.exe" -Wait -ArgumentList "/ai"
 }
 
-Function Remove-TmpFiles
+Function Install-TimerResolutionService
 {
-	Get-ChildItem -Path "C:\Windows\Temp" *.* -Recurse | Remove-Item -Force -Recurse
-	Get-ChildItem -Path "$ENV:Temp" *.* -Recurse | Remove-Item -Force -Recurse
-	cleanmgr.exe /VERYLOWDISK
+	Start-Process -FilePath "$PSScriptRoot\SetTimerResolutionService.exe" -Wait -ArgumentList "-install"
+	Set-Service -Name "STR" -StartupType Automatic
+	Start-Service -Name "STR"
 }
 
 Function main
@@ -119,25 +126,26 @@ Function main
 	$Battery = Get-CimInstance -Class CIM_Battery
 	if ($Battery -eq $NULL -or $Battery.Availability -eq "" -or $Battery.Availability -eq 11) {
 		Write-Host "Installing Bitsum PowerPlan"
-		Install-Bitsum-PowerPlan
-		Remove-Other-PowerPlans
+		Install-BitsumPowerPlan
+		Remove-OtherPowerPlans
 	}
 	Disable-Hibernation
-	Update-SvcHost-Threshold
-	Install-TimerResolution-Service
+	Update-SvcHostThreshold
+	Install-C++Packages
+	Install-TimerResolutionService
 	Remove-DefaultApps
 	Import-RegistryKeys
-	Remove-StartMenu-Tiles
-	Add-StartMenu-Shortcuts
+	Remove-StartMenuTiles
+	Add-StartMenuShortcuts
 
 	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
 	if ($GpuBrand -match "nvidia") {
 		"Write-Host Importing Nvidia optimised settings"
-		Enable-MSIMode-Nvidia
+		Enable-MSIModeNvidia
 		Download-NvidiaProfileInspector
 		Import-NvidiaProfile
 	}
-	Remove-TmpFiles
+	Restart-Computer
 }
 
 main
