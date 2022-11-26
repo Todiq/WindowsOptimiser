@@ -107,15 +107,24 @@ Windows Registry Editor Version 5.00
 
 ; Remove folders in Start Menu
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Start]
-"AllowPinnedFolderDocuments"=dword:00000000
-"AllowPinnedFolderDownloads"=dword:00000000
-"AllowPinnedFolderFileExplorer"=dword:00000000
-"AllowPinnedFolderMusic"=dword:00000000
-"AllowPinnedFolderNetwork"=dword:00000000
-"AllowPinnedFolderPersonalFolder"=dword:00000000
-"AllowPinnedFolderPictures"=dword:00000000
-"AllowPinnedFolderSettings"=dword:00000000
-"AllowPinnedFolderVideos"=dword:00000000
+"AllowPinnedFolderDocuments"=dword:00000001
+"AllowPinnedFolderDocuments_ProviderSet"=dword:00000001
+"AllowPinnedFolderDownloads"=dword:00000001
+"AllowPinnedFolderDownloads_ProviderSet"=dword:00000001
+"AllowPinnedFolderFileExplorer"=dword:00000001
+"AllowPinnedFolderFileExplorer_ProviderSet"=dword:00000001
+"AllowPinnedFolderMusic"=dword:00000001
+"AllowPinnedFolderMusic_ProviderSet"=dword:00000001
+"AllowPinnedFolderNetwork"=dword:00000001
+"AllowPinnedFolderNetwork_ProviderSet"=dword:00000001
+"AllowPinnedFolderPersonalFolder"=dword:00000001
+"AllowPinnedFolderPersonalFolder_ProviderSet"=dword:00000001
+"AllowPinnedFolderPictures"=dword:00000001
+"AllowPinnedFolderPictures_ProviderSet"=dword:00000001
+"AllowPinnedFolderSettings"=dword:00000001
+"AllowPinnedFolderSettings_ProviderSet"=dword:00000001
+"AllowPinnedFolderVideos"=dword:00000001
+"AllowPinnedFolderVideos_ProviderSet"=dword:00000001
 
 ; Remove default start menu
 [-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount]

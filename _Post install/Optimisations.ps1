@@ -27,13 +27,13 @@ Function Import-RegistryKeys
 
 Function Remove-StartMenuTiles
 {
-	Rename-Item -Path "$env:LocalAppData\Microsoft\Windows\Shell\DefaultLayouts.xml" -NewName "DefaultLayouts.xml.bal"
+#	Rename-Item -Path "$env:LocalAppData\Microsoft\Windows\Shell\DefaultLayouts.xml" -NewName "DefaultLayouts.xml.bal"
 	Import-StartLayout -LayoutPath "$PSScriptRoot\LayoutModification.xml" -MountPath "$env:SystemDrive\"
 }
 
-Function Add-StartMenuShortcuts
+Function Set-StartMenuShortcuts
 {
-	$startMenuFolder = "$env:appdata\Microsoft\Windows\Start Menu\Programs"
+	$startMenuFolder = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
 
 	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Corbeille.lnk")
 	$Shortcut.TargetPath = "shell:RecycleBinFolder"
@@ -137,7 +137,7 @@ Function main
 	Remove-DefaultApps
 	Import-RegistryKeys
 	Remove-StartMenuTiles
-	Add-StartMenuShortcuts
+	Set-StartMenuShortcuts
 	Remove-Item "$env:SystemDrive\Users\Public\Desktop\Microsoft Edge.lnk"
 	Remove-Item "$env:SystemDrive\$env:HomePath\Desktop\Microsoft Edge.lnk"
 
