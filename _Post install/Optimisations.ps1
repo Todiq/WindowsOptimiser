@@ -16,7 +16,7 @@ Function Remove-DefaultApps
 	ForEach ($App in $Apps) {
 		Get-AppxPackage -AllUsers $App | Remove-AppxPackage
 	}
-	C:\Windows\SysWOW64\OneDriveSetup.exe -uninstall
+	Start-Process -FilePath "$env:SystemRoot\SysWOW64\OneDriveSetup.exe" -Wait -ArgumentList "-uninstall"
 	Get-WindowsPackage -Online | Where PackageName -like *QuickAssist* | Remove-WindowsPackage -Online -NoRestart
 }
 
@@ -27,7 +27,8 @@ Function Import-RegistryKeys
 
 Function Remove-StartMenuTiles
 {
-	robocopy "$PSScriptRoot" "$env:localappdata\Microsoft\Windows\Shell" "LayoutModification.xml" /nfl /ndl /njh /njs /nc /ns /np
+	Rename-Item -Path "$env:LocalAppData\Microsoft\Windows\Shell\DefaultLayouts.xml" -NewName "DefaultLayouts.xml.bal"
+	Import-StartLayout -LayoutPath "$PSScriptRoot\LayoutModification.xml" -MountPath "$env:SystemDrive\"
 }
 
 Function Add-StartMenuShortcuts
@@ -130,13 +131,14 @@ Function main
 		Remove-OtherPowerPlans
 		Disable-Hibernation
 	}
-#	Update-SvcHostThreshold
+	Update-SvcHostThreshold
 	Install-C++Packages
 	Install-TimerResolutionService
 	Remove-DefaultApps
 	Import-RegistryKeys
 	Remove-StartMenuTiles
 	Add-StartMenuShortcuts
+	Remove-Item "$env:SystemDrive\$env:HomePath\Desktop\Microsoft Edge.lnk"
 
 	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
 	if ($GpuBrand -match "nvidia") {
