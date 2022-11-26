@@ -28,10 +28,10 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 :--------------------------------------
-@echo ----------------------------------------------------------------------------------------------------
-@echo --------------------------------OPTIMISING (PLEASE WAIT)--------------------------------
-@echo ----------------------------------------------------------------------------------------------------
-powershell -executionpolicy bypass -file "%~dp0\_Post install\Optimisations.ps1"
+@echo -----------------------------------------------------------------------------
+@echo --------------------------------OPTIMISING (PLEASE WAIT)---------------------
+@echo -----------------------------------------------------------------------------
+powershell -executionpolicy bypass -file "%~dp0\_Post install\Optimisations.ps1" >nul 2>&1
 @echo .
 @echo .
 @echo .
@@ -60,4 +60,4 @@ powershell -executionpolicy bypass -file "%~dp0\_Post install\Optimisations.ps1"
 @echo .
 @echo .
 pause
-C:\Windows\System32\shutdown.exe /r /t 0
+C:\Windows\System32\shutdown.exe /r /t 10
