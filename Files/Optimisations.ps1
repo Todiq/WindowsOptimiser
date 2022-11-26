@@ -130,7 +130,7 @@ Function main
 		Remove-OtherPowerPlans
 	}
 	Disable-Hibernation
-	Update-SvcHostThreshold
+#	Update-SvcHostThreshold
 	Install-C++Packages
 	Install-TimerResolutionService
 	Remove-DefaultApps
