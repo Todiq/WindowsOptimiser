@@ -138,6 +138,7 @@ Function main
 	Import-RegistryKeys
 	Remove-StartMenuTiles
 	Add-StartMenuShortcuts
+	Remove-Item "$env:SystemDrive\Users\Public\Desktop\Microsoft Edge.lnk"
 	Remove-Item "$env:SystemDrive\$env:HomePath\Desktop\Microsoft Edge.lnk"
 
 	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
