@@ -128,8 +128,8 @@ Function main
 		Write-Host "Installing Bitsum PowerPlan"
 		Install-BitsumPowerPlan
 		Remove-OtherPowerPlans
+		Disable-Hibernation
 	}
-	Disable-Hibernation
 #	Update-SvcHostThreshold
 	Install-C++Packages
 	Install-TimerResolutionService
