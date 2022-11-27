@@ -101,7 +101,7 @@ Function Enable-MSIModeNvidia
 
 Function Install-BitsumPowerPlan
 {
-	powercfg -import $Path 77777777-7777-7777-7777-777777777777
+	powercfg -import "$PSScriptRoot\BitsumHighestPerformance.pow" 77777777-7777-7777-7777-777777777777
 	powercfg -SETACTIVE "77777777-7777-7777-7777-777777777777"
 }
 
@@ -170,7 +170,7 @@ Function main
 
 	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
 	if ($GpuBrand -match "nvidia") {
-		"Write-Host Importing Nvidia optimised settings"
+		Write-Host "Importing Nvidia optimised settings"
 		Enable-MSIModeNvidia
 		Download-NvidiaProfileInspector
 		Import-NvidiaProfile
