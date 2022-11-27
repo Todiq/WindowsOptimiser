@@ -2,20 +2,16 @@ $ProgressPreference = 'SilentlyContinue'
 
 Function Remove-DefaultApps
 {
-	$Apps = @("Disney.37853FC22B2CE", "Microsoft.549981C3F5F10", "Microsoft.BingNews",
-	"Microsoft.BingWeather", "Microsoft.GetHelp", "Microsoft.Getstarted",
-	"Microsoft.Microsoft3DViewer", "Microsoft.MicrosoftOfficeHub", "Microsoft.MicrosoftSolitaireCollection",
-	"Microsoft.MicrosoftStickyNotes", "Microsoft.MixedReality.Portal", "Microsoft.Office.OneNote",
-	"Microsoft.OneDriveSync", "Microsoft.People", "Microsoft.PowerAutomateDesktop",
-	"Microsoft.ScreenSketch", "Microsoft.SkypeApp", "Microsoft.Todos", "Microsoft.Wallet",
-	"Microsoft.WindowsAlarms", "Microsoft.WindowsCamera", "Microsoft.WindowsFeedbackHub",
-	"Microsoft.WindowsMaps", "Microsoft.WindowsSoundRecorder", "Microsoft.YourPhone",
-	"Microsoft.ZuneMusic", "Microsoft.ZuneVideo", "MicrosoftTeams", "MicrosoftWindows.Client.WebExperience",
-	"SpotifyAB.SpotifyMusic", "microsoft.windowscommunicationsapps")
-
-	ForEach ($App in $Apps) {
-		Get-AppxPackage -AllUsers $App | Remove-AppxPackage
-	}
+    $WhitelistedApps = 'Microsoft.WindowsStore|Microsoft.MSPaint|.NET|Framework|Microsoft.StorePurchaseApp'
+    #NonRemovable Apps that where getting attempted and the system would reject the uninstall, speeds up debloat and prevents 'initalizing' overlay when removing apps
+    $NonRemovable = '1527c705-839a-4832-9118-54d4Bd6a0c89|c5e2524a-ea46-4f67-841f-6a9465d9d515|E2A4F912-2574-4A75-9BB0-0D023378592B|F46D4000-FD22-4DB4-AC8E-4E1DDDE828FE|InputApp|Microsoft.AAD.BrokerPlugin|Microsoft.AccountsControl|`
+    Microsoft.BioEnrollment|Microsoft.CredDialogHost|Microsoft.ECApp|Microsoft.LockApp|Microsoft.MicrosoftEdgeDevToolsClient|Microsoft.MicrosoftEdge|Microsoft.PPIProjection|Microsoft.Win32WebViewHost|Microsoft.Windows.Apprep.ChxApp|`
+    Microsoft.Windows.AssignedAccessLockApp|Microsoft.Windows.CapturePicker|Microsoft.Windows.CloudExperienceHost|Microsoft.Windows.ContentDeliveryManager|Microsoft.Windows.Cortana|Microsoft.Windows.NarratorQuickStart|`
+    Microsoft.Windows.ParentalControls|Microsoft.Windows.PeopleExperienceHost|Microsoft.Windows.PinningConfirmationDialog|Microsoft.Windows.SecHealthUI|Microsoft.Windows.SecureAssessmentBrowser|Microsoft.Windows.ShellExperienceHost|`
+    Microsoft.Windows.XGpuEjectDialog|Microsoft.XboxGameCallableUI|Windows.CBSPreview|windows.immersivecontrolpanel|Windows.PrintDialog|Microsoft.VCLibs.140.00|Microsoft.Services.Store.Engagement|Microsoft.UI.Xaml.2.0|*Nvidia*'
+    Get-AppxPackage -AllUsers | Where-Object {$_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable} | Remove-AppxPackage
+    Get-AppxPackage | Where-Object {$_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable} | Remove-AppxPackage
+    Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -NotMatch $WhitelistedApps -and $_.PackageName -NotMatch $NonRemovable} | Remove-AppxProvisionedPackage -Online
 	Start-Process -FilePath "$env:SystemRoot\SysWOW64\OneDriveSetup.exe" -Wait -ArgumentList "-uninstall"
 	Get-WindowsPackage -Online | Where PackageName -like *QuickAssist* | Remove-WindowsPackage -Online -NoRestart
 }
@@ -76,13 +72,6 @@ Function Remove-StartMenuDefaultShortcuts
 	Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Maintenance" -Recurse -Force
 	Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Accessibility" -Recurse -Force
 	Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Administrative Tools" -Recurse -Force
-	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Remove US keyboard" -Target "$PSScriptRoot\Remove US keyboard.bat"
-	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 1" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs"
-	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 2" -Target "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
-	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Startup programs" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup"
-	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Paint" -Target "$env:WinDir\system32\mspaint.exe"
-	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Bloc-notes" -Target "$env:WinDir\system32\notepad.exe"
-	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Panneau de configuration" -Target "$env:WinDir\system32\control.exe"
 }
 
 Function Download-NvidiaProfileInspector
