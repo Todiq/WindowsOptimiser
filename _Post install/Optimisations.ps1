@@ -39,7 +39,7 @@ Function Add-StartMenuShortcuts
 	$Shortcut.TargetPath = "shell:RecycleBinFolder"
 	$Shortcut.Save()
 
-	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Remove US keyboard")
+	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Remove US keyboard.lnk")
 	$Shortcut.TargetPath = "$PSScriptRoot\Remove US keyboard.bat"
 	$Shortcut.Save()
 
