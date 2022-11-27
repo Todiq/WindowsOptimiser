@@ -39,13 +39,50 @@ Function Add-StartMenuShortcuts
 	$Shortcut.TargetPath = "shell:RecycleBinFolder"
 	$Shortcut.Save()
 
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Remove US keyboard" -Target "$PSScriptRoot\Remove US keyboard.bat"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 1" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 2" -Target "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Startup programs" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Paint" -Target "$env:WinDir\system32\mspaint.exe"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Bloc-notes" -Target "$env:WinDir\system32\notepad.exe"
-	New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Panneau de configuration" -Target "$env:WinDir\system32\control.exe"
+	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Remove US keyboard")
+	$Shortcut.TargetPath = "$PSScriptRoot\Remove US keyboard.bat"
+	$Shortcut.Save()
+
+	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Start menu shortcuts 1.lnk")
+	$Shortcut.TargetPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
+	$Shortcut.Save()
+
+	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Start menu shortcuts 2.lnk")
+	$Shortcut.TargetPath = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
+	$Shortcut.Save()
+
+	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Startup programs.lnk")
+	$Shortcut.TargetPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup"
+	$Shortcut.Save()
+
+	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Paint.lnk")
+	$Shortcut.TargetPath = "$env:WinDir\system32\mspaint.exe"
+	$Shortcut.Save()
+
+	$Shortcut = (New-Object -comObject WScript.Shell).CreateShortcut("$startMenuFolder\Bloc-notes.lnk")
+	$Shortcut.TargetPath = "$env:WinDir\system32\notepad.exe"
+	$Shortcut.Save()
+}
+
+Function Remove-StartMenuDefaultShortcuts
+{
+	Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories" -Recurse -Force
+	Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Maintenance" -Recurse -Force
+	Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Accessibility" -Recurse -Force
+	Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools" -Recurse -Force
+	Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\System Tools" -Recurse -Force
+	Remove-ChildItem -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Edge.lnk" -Force
+	Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Accessories" -Recurse -Force
+	Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Maintenance" -Recurse -Force
+	Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Accessibility" -Recurse -Force
+	Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Administrative Tools" -Recurse -Force
+	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Remove US keyboard" -Target "$PSScriptRoot\Remove US keyboard.bat"
+	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 1" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs"
+	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Start menu shortcuts 2" -Target "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
+	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Startup programs" -Target "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup"
+	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Paint" -Target "$env:WinDir\system32\mspaint.exe"
+	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Bloc-notes" -Target "$env:WinDir\system32\notepad.exe"
+	#New-Item -ItemType SymbolicLink -Path "$startMenuFolder\Panneau de configuration" -Target "$env:WinDir\system32\control.exe"
 }
 
 Function Download-NvidiaProfileInspector
@@ -110,6 +147,12 @@ Function Update-SvcHostThreshold
 	}
 }
 
+Function Remove-DesktopEdgeShortcuts
+{
+	Remove-Item "$env:SystemDrive\Users\Public\Desktop\Microsoft Edge.lnk"
+	Remove-Item "$env:SystemDrive\$env:HomePath\Desktop\Microsoft Edge.lnk"
+}
+
 Function Install-C++Packages
 {
 	Start-Process -FilePath "$PSScriptRoot\VisualCppRedist_AIO_x86_x64.exe" -Wait -ArgumentList "/ai"
@@ -138,8 +181,8 @@ Function main
 	Import-RegistryKeys
 	Remove-StartMenuTiles
 	Add-StartMenuShortcuts
-	Remove-Item "$env:SystemDrive\Users\Public\Desktop\Microsoft Edge.lnk"
-	Remove-Item "$env:SystemDrive\$env:HomePath\Desktop\Microsoft Edge.lnk"
+	Remove-StartMenuDefaultShortcuts
+	Remove-DesktopEdgeShortcuts
 
 	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
 	if ($GpuBrand -match "nvidia") {
