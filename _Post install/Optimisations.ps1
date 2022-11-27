@@ -155,7 +155,7 @@ Function Remove-DesktopEdgeShortcuts
 
 Function Install-C++Packages
 {
-	Start-Process -FilePath "$PSScriptRoot\VisualCppRedist_AIO_x86_x64.exe" -Wait -ArgumentList "/ai"
+	Start-Process -FilePath "$PSScriptRoot\VisualCppRedist_AIO_x86_x64.exe" -Wait -ArgumentList "/ai /gm2"
 }
 
 Function Install-TimerResolutionService
@@ -174,7 +174,7 @@ Function main
 		Remove-OtherPowerPlans
 		Disable-Hibernation
 	}
-	Update-SvcHostThreshold
+	#Update-SvcHostThreshold
 	Install-C++Packages
 	Install-TimerResolutionService
 	Remove-DefaultApps
