@@ -27,7 +27,7 @@ Function Import-RegistryKeys
 
 Function Remove-StartMenuTiles
 {
-	Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount"
+	Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount" -Recurse -Force
 	Import-StartLayout -LayoutPath "$PSScriptRoot\LayoutModification.xml" -MountPath "$env:SystemDrive\"
 }
 
