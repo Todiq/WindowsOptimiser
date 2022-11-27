@@ -2,7 +2,7 @@ $ProgressPreference = 'SilentlyContinue'
 
 Function Remove-DefaultApps
 {
-	$WhitelistedApps = 'Microsoft.WindowsStore|.NET|Framework|Microsoft.StorePurchaseApp'
+	$WhitelistedApps = 'Microsoft.WindowsStore|.NET|Framework|Microsoft.StorePurchaseApp|nvidia'
 	Get-AppxPackage -AllUsers | Where-Object {$_.Name -NotMatch $WhitelistedApps} | Remove-AppxPackage
 	Get-AppxPackage | Where-Object {$_.Name -NotMatch $WhitelistedApps} | Remove-AppxPackage
 	Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -NotMatch $WhitelistedApps} | Remove-AppxProvisionedPackage -Online
@@ -175,6 +175,7 @@ Function main
 		Download-NvidiaProfileInspector
 		Import-NvidiaProfile
 	}
+	Start-Sleep -Seconds 5
 	Restart-Computer
 }
 
