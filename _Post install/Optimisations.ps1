@@ -27,11 +27,11 @@ Function Import-RegistryKeys
 
 Function Remove-StartMenuTiles
 {
-#	Rename-Item -Path "$env:LocalAppData\Microsoft\Windows\Shell\DefaultLayouts.xml" -NewName "DefaultLayouts.xml.bal"
+	Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount"
 	Import-StartLayout -LayoutPath "$PSScriptRoot\LayoutModification.xml" -MountPath "$env:SystemDrive\"
 }
 
-Function Set-StartMenuShortcuts
+Function Add-StartMenuShortcuts
 {
 	$startMenuFolder = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
 
@@ -137,7 +137,7 @@ Function main
 	Remove-DefaultApps
 	Import-RegistryKeys
 	Remove-StartMenuTiles
-	Set-StartMenuShortcuts
+	Add-StartMenuShortcuts
 	Remove-Item "$env:SystemDrive\Users\Public\Desktop\Microsoft Edge.lnk"
 	Remove-Item "$env:SystemDrive\$env:HomePath\Desktop\Microsoft Edge.lnk"
 
