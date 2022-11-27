@@ -79,11 +79,12 @@ Function Download-NvidiaProfileInspector
 
 Function Import-NvidiaProfile
 {
-	Start-Process `
-	-FilePath "$PSScriptRoot\nvidiaProfileInspector\nvidiaProfileInspector.exe" `
-	-Workdir "$PSScriptRoot\nvidiaProfileInspector\" `
-	-Wait `
-	-ArgumentList "$PSScriptRoot\NvidiaBaseProfile.nip"
+	.\nvidiaProfileInspector\nvidiaProfileInspector.exe "$PSScriptRoot\NvidiaBaseProfile.nip"
+	# Start-Process `
+	# -FilePath "$PSScriptRoot\nvidiaProfileInspector\nvidiaProfileInspector.exe" `
+	# -Workdir "$PSScriptRoot\nvidiaProfileInspector\" `
+	# -Wait `
+	# -ArgumentList "$PSScriptRoot\NvidiaBaseProfile.nip"
 }
 
 Function Enable-MSIModeNvidia
