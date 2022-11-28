@@ -79,7 +79,7 @@ Function Download-NvidiaProfileInspector
 
 Function Import-NvidiaProfile
 {
-	.\nvidiaProfileInspector\nvidiaProfileInspector.exe "$PSScriptRoot\NvidiaBaseProfile.nip"
+	nvidiaProfileInspector\nvidiaProfileInspector.exe "$PSScriptRoot\NvidiaBaseProfile.nip"
 	# Start-Process `
 	# -FilePath "$PSScriptRoot\nvidiaProfileInspector\nvidiaProfileInspector.exe" `
 	# -Workdir "$PSScriptRoot\nvidiaProfileInspector\" `
@@ -152,32 +152,32 @@ Function Install-TimerResolutionService
 
 Function main
 {
-	$Battery = Get-CimInstance -Class CIM_Battery
-	if ($Battery -eq $NULL -or $Battery.Availability -eq "" -or $Battery.Availability -eq 11) {
-		Write-Host "Installing Bitsum PowerPlan"
-		Install-BitsumPowerPlan
-		Remove-OtherPowerPlans
-		Disable-Hibernation
-	}
-	#Update-SvcHostThreshold
-	Install-C++Packages
-	Install-TimerResolutionService
-	Remove-DefaultApps
-	Import-RegistryKeys
-	Remove-StartMenuTiles
-	Add-StartMenuShortcuts
-	Remove-StartMenuDefaultShortcuts
-	Remove-DesktopEdgeShortcuts
+	# $Battery = Get-CimInstance -Class CIM_Battery
+	# if ($Battery -eq $NULL -or $Battery.Availability -eq "" -or $Battery.Availability -eq 11) {
+	# 	Write-Host "Installing Bitsum PowerPlan"
+	# 	Install-BitsumPowerPlan
+	# 	Remove-OtherPowerPlans
+	# 	Disable-Hibernation
+	# }
+	# #Update-SvcHostThreshold
+	# Install-C++Packages
+	# Install-TimerResolutionService
+	# Remove-DefaultApps
+	# Import-RegistryKeys
+	# Remove-StartMenuTiles
+	# Add-StartMenuShortcuts
+	# Remove-StartMenuDefaultShortcuts
+	# Remove-DesktopEdgeShortcuts
 
-	$GpuBrand = (Get-WmiObject Win32_VideoController).Name
-	if ($GpuBrand -match "nvidia") {
-		Write-Host "Importing Nvidia optimised settings"
-		Enable-MSIModeNvidia
-		Download-NvidiaProfileInspector
-		Import-NvidiaProfile
-	}
-	Start-Sleep -Seconds 5
-	Restart-Computer
+	# $GpuBrand = (Get-WmiObject Win32_VideoController).Name
+	# if ($GpuBrand -match "nvidia") {
+	 	Write-Host "Importing Nvidia optimised settings"
+	# 	Enable-MSIModeNvidia
+	 	Download-NvidiaProfileInspector
+	 	Import-NvidiaProfile
+	# }
+	# Start-Sleep -Seconds 5
+	# Restart-Computer
 }
 
 main
