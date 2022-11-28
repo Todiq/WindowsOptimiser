@@ -31,7 +31,7 @@ if '%errorlevel%' NEQ '0' (
 @echo -----------------------------------------------------------------------------
 @echo --------------------------------OPTIMISING (PLEASE WAIT)---------------------
 @echo -----------------------------------------------------------------------------
-powershell -executionpolicy bypass -file "%~dp0\_Post install\Optimisations.ps1" >nul 2>&1
+powershell -executionpolicy bypass -file "%~dp0\Files\Optimisations.ps1" >nul 2>&1
 @echo .
 @echo .
 @echo .

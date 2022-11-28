@@ -29,4 +29,4 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 
-powershell -executionpolicy bypass -file "%~dp0_Post install\Ninite\Ninite.ps1"
+powershell -executionpolicy bypass -file "%~dp0Files\Ninite\Ninite.ps1"

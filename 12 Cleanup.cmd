@@ -29,4 +29,4 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 
-powershell -executionpolicy bypass -file "%~dp0\_Post install\Cleanup.ps1"
+powershell -executionpolicy bypass -file "%~dp0\Files\Cleanup.ps1"
